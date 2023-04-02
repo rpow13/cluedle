@@ -8,15 +8,15 @@ import {
   ENABLE_MIGRATE_STATS,
 } from '../../constants/settings'
 import {
-  ARCHIVE_GAMEDATE_TEXT,
+  ARCHIVE_gameNumber_TEXT,
   GUESS_DISTRIBUTION_TEXT,
   NEW_WORD_TEXT,
-  SHARE_TEXT,
+  NEXT_CLUE_TEXT,
   STATISTICS_TITLE,
 } from '../../constants/strings'
 import { GameStats } from '../../lib/localStorage'
 import { shareStatus } from '../../lib/share'
-import { solutionGameDate, tomorrow } from '../../lib/words'
+import { solutionGameNumber, followingGame } from '../../lib/words'
 import { Histogram } from '../stats/Histogram'
 import { MigrationIntro } from '../stats/MigrationIntro'
 import { StatBar } from '../stats/StatBar'
@@ -92,23 +92,15 @@ export const StatsModal = ({
           <div className="inline-block w-full text-left">
             {(!ENABLE_ARCHIVED_GAMES || isLatestGame) && (
               <div>
-                <h5>{NEW_WORD_TEXT}</h5>
-                <Countdown
-                  className="text-lg font-medium text-gray-900 dark:text-gray-100"
-                  date={tomorrow}
-                  daysInHours={true}
-                />
               </div>
             )}
             {ENABLE_ARCHIVED_GAMES && !isLatestGame && (
               <div className="mt-2 inline-flex">
                 <ClockIcon className="mr-1 mt-2 mt-1 h-5 w-5 stroke-black dark:stroke-white" />
                 <div className="mt-1 ml-1 text-center text-sm sm:text-base">
-                  <strong>{ARCHIVE_GAMEDATE_TEXT}:</strong>
+                  <strong>{ARCHIVE_gameNumber_TEXT}:</strong>
                   <br />
-                  {format(solutionGameDate, 'd MMMM yyyy', {
-                    locale: DATE_LOCALE,
-                  })}
+                  {solutionGameNumber}
                 </div>
               </div>
             )}
@@ -130,8 +122,7 @@ export const StatsModal = ({
                 )
               }}
             >
-              <ShareIcon className="mr-2 h-6 w-6 cursor-pointer dark:stroke-white" />
-              {SHARE_TEXT}
+              {NEXT_CLUE_TEXT}
             </button>
           </div>
         </div>

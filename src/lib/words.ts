@@ -15,8 +15,9 @@ import { WORDS } from '../constants/wordlist'
 import { getToday } from './dateutils'
 import { getGuessStatuses } from './statuses'
 
-// 1 January 2022 Game Epoch
-export const firstGameDate = new Date(2022, 0)
+export const firstgameNumber = 0
+export const lastgameNumber = 27
+export const currentGameNumber = 0
 export const periodInDays = 1
 
 export const isWordInWordList = (word: string) => {
@@ -89,33 +90,35 @@ export const localeAwareUpperCase = (text: string) => {
     : text.toUpperCase()
 }
 
-export const getLastGameDate = (today: Date) => {
-  const t = startOfDay(today)
-  let daysSinceLastGame = differenceInDays(firstGameDate, t) % periodInDays
-  return addDays(t, -daysSinceLastGame)
+export const getLastgameNumber = () => {
+  //const t = startOfDay(today)
+  //let daysSinceLastGame = differenceInDays(firstgameNumber, t) % periodInDays
+  //return addDays(t, -daysSinceLastGame)
+  return lastgameNumber
 }
 
-export const getNextGameDate = (today: Date) => {
-  return addDays(getLastGameDate(today), periodInDays)
+export const getNextgameNumber = (current: number) => {
+  return current + 1
 }
 
-export const isValidGameDate = (date: Date) => {
-  if (date < firstGameDate || date > getToday()) {
+export const isValidgameNumber = (number: number) => {
+  if (number < firstgameNumber || number >= lastgameNumber) {
     return false
   }
-
-  return differenceInDays(firstGameDate, date) % periodInDays === 0
+  return true
 }
 
-export const getIndex = (gameDate: Date) => {
-  let start = firstGameDate
-  let index = -1
-  do {
-    index++
-    start = addDays(start, periodInDays)
-  } while (start <= gameDate)
+export const getIndex = (gameNumber: number) => {
+  // let start = firstgameNumber
+  // let index = -1
+  // do {
+  //   index++
+  //   start++
+  // } while (start <= gameNumber)
 
-  return index
+  // return index
+
+  return gameNumber
 }
 
 export const getWordOfDay = (index: number) => {
@@ -126,40 +129,41 @@ export const getWordOfDay = (index: number) => {
   return localeAwareUpperCase(WORDS[index % WORDS.length])
 }
 
-export const getSolution = (gameDate: Date) => {
-  const nextGameDate = getNextGameDate(gameDate)
-  const index = getIndex(gameDate)
+export const getSolution = (gameNumber: number) => {
+  const nextgameNumber = getNextgameNumber(gameNumber)
+  const index = getIndex(gameNumber)
   const wordOfTheDay = getWordOfDay(index)
   return {
     solution: wordOfTheDay,
-    solutionGameDate: gameDate,
+    solutionGameNumber: gameNumber,
     solutionIndex: index,
-    tomorrow: nextGameDate.valueOf(),
+    followingGame: nextgameNumber.valueOf(),
   }
 }
 
-export const getGameDate = () => {
+export const getGameNumber = () => {
   if (getIsLatestGame()) {
-    return getToday()
+    return lastgameNumber
   }
 
   const parsed = queryString.parse(window.location.search)
   try {
-    const d = startOfDay(parseISO(parsed.d!.toString()))
-    if (d >= getToday() || d < firstGameDate) {
-      setGameDate(getToday())
+    const d = parseInt(parsed.d!.toString(), 10)
+    if (d < firstgameNumber || d > lastgameNumber) {
+      setGameNumber(firstgameNumber)
+      return firstgameNumber
     }
     return d
   } catch (e) {
     console.log(e)
-    return getToday()
+    return firstgameNumber
   }
 }
 
-export const setGameDate = (d: Date) => {
+export const setGameNumber = (d: number) => {
   try {
-    if (d < getToday()) {
-      window.location.href = '/?d=' + formatISO(d, { representation: 'date' })
+    if (d < lastgameNumber) {
+      window.location.href = '/?d=' + d
       return
     }
   } catch (e) {
@@ -176,5 +180,5 @@ export const getIsLatestGame = () => {
   return parsed === null || !('d' in parsed)
 }
 
-export const { solution, solutionGameDate, solutionIndex, tomorrow } =
-  getSolution(getGameDate())
+export const { solution, solutionGameNumber, solutionIndex, followingGame } =
+  getSolution(getGameNumber())

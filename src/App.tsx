@@ -44,19 +44,19 @@ import {
 import { addStatsForCompletedGame, loadStats } from './lib/stats'
 import {
   findFirstUnusedReveal,
-  getGameDate,
+  getGameNumber,
   getIsLatestGame,
   isWinningWord,
   isWordInWordList,
-  setGameDate,
+  setGameNumber,
   solution,
-  solutionGameDate,
+  solutionGameNumber,
   unicodeLength,
 } from './lib/words'
 
 function App() {
   const isLatestGame = getIsLatestGame()
-  const gameDate = getGameDate()
+  const gameNumber = getGameNumber()
   const prefersDarkMode = window.matchMedia(
     '(prefers-color-scheme: dark)'
   ).matches
@@ -285,7 +285,7 @@ function App() {
           <div className="flex items-center justify-center">
             <ClockIcon className="h-6 w-6 stroke-gray-600 dark:stroke-gray-300" />
             <p className="text-base text-gray-600 dark:text-gray-300">
-              {format(gameDate, 'd MMMM yyyy', { locale: DATE_LOCALE })}
+              {format(gameNumber, 'd MMMM yyyy', { locale: DATE_LOCALE })}
             </p>
           </div>
         )}
@@ -338,10 +338,10 @@ function App() {
           />
           <DatePickerModal
             isOpen={isDatePickerModalOpen}
-            initialDate={solutionGameDate}
-            handleSelectDate={(d) => {
+            initialGame={solutionGameNumber}
+            handleSelectGame={(d) => {
               setIsDatePickerModalOpen(false)
-              setGameDate(d)
+              setGameNumber(d)
             }}
             handleClose={() => setIsDatePickerModalOpen(false)}
           />
