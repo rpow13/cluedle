@@ -142,10 +142,6 @@ export const getSolution = (gameNumber: number) => {
 }
 
 export const getGameNumber = () => {
-  if (getIsLatestGame()) {
-    return lastgameNumber
-  }
-
   const parsed = queryString.parse(window.location.search)
   try {
     const d = parseInt(parsed.d!.toString(), 10)
@@ -156,13 +152,13 @@ export const getGameNumber = () => {
     return d
   } catch (e) {
     console.log(e)
-    return firstgameNumber
   }
+  return firstgameNumber
 }
 
 export const setGameNumber = (d: number) => {
   try {
-    if (d < lastgameNumber) {
+    if (d <= lastgameNumber) {
       window.location.href = '/?d=' + d
       return
     }
@@ -170,14 +166,6 @@ export const setGameNumber = (d: number) => {
     console.log(e)
   }
   window.location.href = '/'
-}
-
-export const getIsLatestGame = () => {
-  if (!ENABLE_ARCHIVED_GAMES) {
-    return true
-  }
-  const parsed = queryString.parse(window.location.search)
-  return parsed === null || !('d' in parsed)
 }
 
 export const { solution, solutionGameNumber, solutionIndex, followingGame } =

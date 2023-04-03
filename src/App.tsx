@@ -42,7 +42,6 @@ import { addStatsForCompletedGame, loadStats } from './lib/stats'
 import {
   findFirstUnusedReveal,
   getGameNumber,
-  getIsLatestGame,
   isWinningWord,
   isWordInWordList,
   lastgameNumber,
@@ -53,7 +52,6 @@ import {
 } from './lib/words'
 
 function App() {
-  const isLatestGame = getIsLatestGame()
   const gameNumber = getGameNumber()
   const prefersDarkMode = window.matchMedia(
     '(prefers-color-scheme: dark)'
@@ -82,7 +80,7 @@ function App() {
   )
   const [isRevealing, setIsRevealing] = useState(false)
   const [guesses, setGuesses] = useState<string[]>(() => {
-    const loaded = loadGameStateFromLocalStorage(isLatestGame)
+    const loaded = loadGameStateFromLocalStorage()
     if (loaded?.solution !== solution) {
       return []
     }
@@ -110,7 +108,7 @@ function App() {
   useEffect(() => {
     // if no game state on load,
     // show the user the how-to info modal
-    if (!loadGameStateFromLocalStorage(true)) {
+    if (!loadGameStateFromLocalStorage()) {
       setTimeout(() => {
         setIsInfoModalOpen(true)
       }, WELCOME_INFO_MODAL_MS)
@@ -164,7 +162,7 @@ function App() {
   }
 
   useEffect(() => {
-    saveGameStateToLocalStorage(getIsLatestGame(), { guesses, solution })
+    saveGameStateToLocalStorage({ guesses, solution })
   }, [guesses])
 
   useEffect(() => {
@@ -250,16 +248,12 @@ function App() {
       setCurrentGuess('')
 
       if (winningWord) {
-        if (isLatestGame) {
-          setStats(addStatsForCompletedGame(stats, guesses.length))
-        }
+        setStats(addStatsForCompletedGame(stats, guesses.length))
         return setIsGameWon(true)
       }
 
       if (guesses.length === MAX_CHALLENGES - 1) {
-        if (isLatestGame) {
-          setStats(addStatsForCompletedGame(stats, guesses.length + 1))
-        }
+        setStats(addStatsForCompletedGame(stats, guesses.length + 1))
         setIsGameLost(true)
         showErrorAlert(CORRECT_WORD_MESSAGE(solution), {
           persist: true,
@@ -313,7 +307,6 @@ function App() {
             solution={solution}
             guesses={guesses}
             gameStats={stats}
-            isLatestGame={isLatestGame}
             isGameLost={isGameLost}
             isGameWon={isGameWon}
             handleShareToClipboard={() => showSuccessAlert(GAME_COPIED_MESSAGE)}

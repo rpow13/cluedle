@@ -32,7 +32,7 @@ export const DatePickerModal = ({
   const lastgameNumber = getLastgameNumber()
   const [selectedGame, setSelectedGame] = useState<number>(() => {
     if (initialGame == null || initialGame > lastgameNumber) {
-      return lastgameNumber
+      return 0
     }
     return initialGame
   })
