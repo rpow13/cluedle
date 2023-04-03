@@ -11,7 +11,7 @@ export const EmigratePanel = () => {
   const [isCopyButtonEnabled, setIsCopyButtonEnabled] = useState(true)
   const [copyButtonText, setCopyButtonText] = useState('Copy')
   const stats = loadStats()
-  const gameState = loadGameStateFromLocalStorage(true)
+  const gameState = loadGameStateFromLocalStorage()
 
   const migrationStats: MigrationStats = {
     statistics: stats,

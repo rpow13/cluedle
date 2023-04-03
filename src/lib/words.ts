@@ -1,22 +1,14 @@
-import {
-  addDays,
-  differenceInDays,
-  formatISO,
-  parseISO,
-  startOfDay,
-} from 'date-fns'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 import queryString from 'query-string'
 
-import { ENABLE_ARCHIVED_GAMES } from '../constants/settings'
 import { NOT_CONTAINED_MESSAGE, WRONG_SPOT_MESSAGE } from '../constants/strings'
 import { VALID_GUESSES } from '../constants/validGuesses'
 import { WORDS } from '../constants/wordlist'
-import { getToday } from './dateutils'
 import { getGuessStatuses } from './statuses'
 
-// 1 January 2022 Game Epoch
-export const firstGameDate = new Date(2022, 0)
+export const firstgameNumber = 1
+export const lastgameNumber = 28
+export const currentGameNumber = 1
 export const periodInDays = 1
 
 export const isWordInWordList = (word: string) => {
@@ -89,77 +81,64 @@ export const localeAwareUpperCase = (text: string) => {
     : text.toUpperCase()
 }
 
-export const getLastGameDate = (today: Date) => {
-  const t = startOfDay(today)
-  let daysSinceLastGame = differenceInDays(firstGameDate, t) % periodInDays
-  return addDays(t, -daysSinceLastGame)
+export const getLastgameNumber = () => {
+  return lastgameNumber
 }
 
-export const getNextGameDate = (today: Date) => {
-  return addDays(getLastGameDate(today), periodInDays)
+export const getNextgameNumber = (current: number) => {
+  return current + 1
 }
 
-export const isValidGameDate = (date: Date) => {
-  if (date < firstGameDate || date > getToday()) {
+export const isValidgameNumber = (number: number) => {
+  if (number < firstgameNumber || number >= lastgameNumber) {
     return false
   }
-
-  return differenceInDays(firstGameDate, date) % periodInDays === 0
+  return true
 }
 
-export const getIndex = (gameDate: Date) => {
-  let start = firstGameDate
-  let index = -1
-  do {
-    index++
-    start = addDays(start, periodInDays)
-  } while (start <= gameDate)
-
-  return index
+export const getIndex = (gameNumber: number) => {
+  return gameNumber
 }
 
-export const getWordOfDay = (index: number) => {
-  if (index < 0) {
+export const getWordOfGame = (index: number) => {
+  if (index < 1) {
     throw new Error('Invalid index')
   }
 
-  return localeAwareUpperCase(WORDS[index % WORDS.length])
+  return localeAwareUpperCase(WORDS[(index-1) % WORDS.length])
 }
 
-export const getSolution = (gameDate: Date) => {
-  const nextGameDate = getNextGameDate(gameDate)
-  const index = getIndex(gameDate)
-  const wordOfTheDay = getWordOfDay(index)
+export const getSolution = (gameNumber: number) => {
+  const nextgameNumber = getNextgameNumber(gameNumber)
+  const index = getIndex(gameNumber)
+  const wordOfTheGame = getWordOfGame(index)
   return {
-    solution: wordOfTheDay,
-    solutionGameDate: gameDate,
+    solution: wordOfTheGame,
+    solutionGameNumber: gameNumber,
     solutionIndex: index,
-    tomorrow: nextGameDate.valueOf(),
+    followingGame: nextgameNumber.valueOf(),
   }
 }
 
-export const getGameDate = () => {
-  if (getIsLatestGame()) {
-    return getToday()
-  }
-
+export const getGameNumber = () => {
   const parsed = queryString.parse(window.location.search)
   try {
-    const d = startOfDay(parseISO(parsed.d!.toString()))
-    if (d >= getToday() || d < firstGameDate) {
-      setGameDate(getToday())
+    const d = parseInt(parsed.d!.toString(), 10)
+    if (d < firstgameNumber || d > lastgameNumber) {
+      setGameNumber(firstgameNumber)
+      return firstgameNumber
     }
     return d
   } catch (e) {
     console.log(e)
-    return getToday()
   }
+  return firstgameNumber
 }
 
-export const setGameDate = (d: Date) => {
+export const setGameNumber = (d: number) => {
   try {
-    if (d < getToday()) {
-      window.location.href = '/?d=' + formatISO(d, { representation: 'date' })
+    if (d <= lastgameNumber) {
+      window.location.href = '/?d=' + d
       return
     }
   } catch (e) {
@@ -168,13 +147,5 @@ export const setGameDate = (d: Date) => {
   window.location.href = '/'
 }
 
-export const getIsLatestGame = () => {
-  if (!ENABLE_ARCHIVED_GAMES) {
-    return true
-  }
-  const parsed = queryString.parse(window.location.search)
-  return parsed === null || !('d' in parsed)
-}
-
-export const { solution, solutionGameDate, solutionIndex, tomorrow } =
-  getSolution(getGameDate())
+export const { solution, solutionGameNumber, solutionIndex, followingGame } =
+  getSolution(getGameNumber())
