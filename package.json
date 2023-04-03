@@ -8,6 +8,7 @@
     "fix": "prettier --write src",
     "lint": "prettier --check src",
     "start": "react-scripts start",
+    "start_debug": "Node_ENV=development& react-scripts start",
     "test": "react-scripts test",
     "prepare": "husky install"
   },

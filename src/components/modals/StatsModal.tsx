@@ -90,20 +90,14 @@ export const StatsModal = ({
       {(isGameLost || isGameWon) && (
         <div className="mt-5 columns-2 items-center items-stretch justify-center text-center dark:text-white sm:mt-6">
           <div className="inline-block w-full text-left">
-            {(!ENABLE_ARCHIVED_GAMES || isLatestGame) && (
-              <div>
-              </div>
-            )}
-            {ENABLE_ARCHIVED_GAMES && !isLatestGame && (
               <div className="mt-2 inline-flex">
-                <ClockIcon className="mr-1 mt-2 mt-1 h-5 w-5 stroke-black dark:stroke-white" />
                 <div className="mt-1 ml-1 text-center text-sm sm:text-base">
                   <strong>{ARCHIVE_gameNumber_TEXT}:</strong>
                   <br />
                   {solutionGameNumber}
                 </div>
               </div>
-            )}
+
           </div>
           <div>
             <button
