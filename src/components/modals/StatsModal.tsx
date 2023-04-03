@@ -84,7 +84,7 @@ export const StatsModal = ({
                 <div className="mt-1 ml-1 text-center text-sm sm:text-base">
                   <strong>{ARCHIVE_gameNumber_TEXT}:</strong>
                   <br />
-                  {solutionGameNumber}
+                  {solutionGameNumber} of {lastgameNumber}
                 </div>
               </div>
 
