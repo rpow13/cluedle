@@ -1,5 +1,4 @@
 const gameStateKey = 'gameState'
-const archiveGameStateKey = 'archiveGameState'
 const highContrastKey = 'highContrast'
 
 export type StoredGameState = {

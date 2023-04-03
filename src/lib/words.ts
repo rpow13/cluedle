@@ -1,23 +1,14 @@
-import {
-  addDays,
-  differenceInDays,
-  formatISO,
-  parseISO,
-  startOfDay,
-} from 'date-fns'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
 import queryString from 'query-string'
 
-import { ENABLE_ARCHIVED_GAMES } from '../constants/settings'
 import { NOT_CONTAINED_MESSAGE, WRONG_SPOT_MESSAGE } from '../constants/strings'
 import { VALID_GUESSES } from '../constants/validGuesses'
 import { WORDS } from '../constants/wordlist'
-import { getToday } from './dateutils'
 import { getGuessStatuses } from './statuses'
 
-export const firstgameNumber = 0
-export const lastgameNumber = 27
-export const currentGameNumber = 0
+export const firstgameNumber = 1
+export const lastgameNumber = 28
+export const currentGameNumber = 1
 export const periodInDays = 1
 
 export const isWordInWordList = (word: string) => {
@@ -91,9 +82,6 @@ export const localeAwareUpperCase = (text: string) => {
 }
 
 export const getLastgameNumber = () => {
-  //const t = startOfDay(today)
-  //let daysSinceLastGame = differenceInDays(firstgameNumber, t) % periodInDays
-  //return addDays(t, -daysSinceLastGame)
   return lastgameNumber
 }
 
@@ -109,32 +97,23 @@ export const isValidgameNumber = (number: number) => {
 }
 
 export const getIndex = (gameNumber: number) => {
-  // let start = firstgameNumber
-  // let index = -1
-  // do {
-  //   index++
-  //   start++
-  // } while (start <= gameNumber)
-
-  // return index
-
   return gameNumber
 }
 
-export const getWordOfDay = (index: number) => {
-  if (index < 0) {
+export const getWordOfGame = (index: number) => {
+  if (index < 1) {
     throw new Error('Invalid index')
   }
 
-  return localeAwareUpperCase(WORDS[index % WORDS.length])
+  return localeAwareUpperCase(WORDS[(index-1) % WORDS.length])
 }
 
 export const getSolution = (gameNumber: number) => {
   const nextgameNumber = getNextgameNumber(gameNumber)
   const index = getIndex(gameNumber)
-  const wordOfTheDay = getWordOfDay(index)
+  const wordOfTheGame = getWordOfGame(index)
   return {
-    solution: wordOfTheDay,
+    solution: wordOfTheGame,
     solutionGameNumber: gameNumber,
     solutionIndex: index,
     followingGame: nextgameNumber.valueOf(),

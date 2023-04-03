@@ -1,6 +1,6 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
-import { getValue } from '@testing-library/user-event/dist/utils';
-import { addDays, format, startOfDay } from 'date-fns'
+
+
+
 import { useState } from 'react'
 import NumberPicker from "react-widgets/NumberPicker";
 
@@ -32,7 +32,7 @@ export const DatePickerModal = ({
   const lastgameNumber = getLastgameNumber()
   const [selectedGame, setSelectedGame] = useState<number>(() => {
     if (initialGame == null || initialGame > lastgameNumber) {
-      return 0
+      return firstgameNumber
     }
     return initialGame
   })

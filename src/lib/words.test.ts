@@ -2,17 +2,17 @@ import {
   getIndex,
   getLastgameNumber,
   getNextgameNumber,
-  getWordOfDay,
+  getWordOfGame,
 } from './words'
 
 describe('solutionIndex', () => {
   test('last game index', () => {
-    expect(getLastgameNumber()).toEqual(17)
+    expect(getLastgameNumber()).toEqual(28)
   })
 
   test('next game date', () => {
-    expect(getNextgameNumber(0)).toEqual(1)
     expect(getNextgameNumber(1)).toEqual(2)
+    expect(getNextgameNumber(2)).toEqual(3)
   })
 
   test('index', () => {
@@ -20,9 +20,9 @@ describe('solutionIndex', () => {
   })
 
   test('word of the day', () => {
-    expect(() => getWordOfDay(-1)).toThrowError('Invalid index')
-    expect(getWordOfDay(0)).toEqual('UNDER')
-    expect(getWordOfDay(1)).toEqual('COUCH')
-    expect(getWordOfDay(27)).toEqual('BLIND')
+    expect(() => getWordOfGame(-1)).toThrowError('Invalid index')
+    expect(getWordOfGame(0)).toEqual('UNDER')
+    expect(getWordOfGame(1)).toEqual('COUCH')
+    expect(getWordOfGame(27)).toEqual('BLIND')
   })
 })

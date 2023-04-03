@@ -1,22 +1,15 @@
-import { ClockIcon, ShareIcon } from '@heroicons/react/outline'
-import { format } from 'date-fns'
-import Countdown from 'react-countdown'
-
 import {
-  DATE_LOCALE,
-  ENABLE_ARCHIVED_GAMES,
   ENABLE_MIGRATE_STATS,
 } from '../../constants/settings'
 import {
   ARCHIVE_gameNumber_TEXT,
   GUESS_DISTRIBUTION_TEXT,
-  NEW_WORD_TEXT,
   NEXT_CLUE_TEXT,
   STATISTICS_TITLE,
 } from '../../constants/strings'
 import { GameStats } from '../../lib/localStorage'
 
-import { solutionGameNumber, followingGame, setGameNumber, lastgameNumber } from '../../lib/words'
+import { solutionGameNumber, setGameNumber, lastgameNumber } from '../../lib/words'
 import { Histogram } from '../stats/Histogram'
 import { MigrationIntro } from '../stats/MigrationIntro'
 import { StatBar } from '../stats/StatBar'
