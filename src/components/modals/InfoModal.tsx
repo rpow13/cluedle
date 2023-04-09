@@ -13,6 +13,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
         Happy Easter! Play wordle to find the secret words in my Easter clues!
         You know wordle right? After each guess, the color of the tiles will
         change to show how close your guess was to the word.  You get 8 guesses.
+        <br/>Look under the keyboard for your first clue.
       </p>
 
       <div className="mb-1 mt-4 flex justify-center">

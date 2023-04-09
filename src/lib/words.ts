@@ -7,7 +7,7 @@ import { WORDS } from '../constants/wordlist'
 import { getGuessStatuses } from './statuses'
 
 export const firstgameNumber = 1
-export const lastgameNumber = 28
+export const lastgameNumber = 42
 export const currentGameNumber = 1
 export const periodInDays = 1
 
